@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500&display=swap" rel="stylesheet" />
+    <style>
+        html,
+        body {
+            background-color: rgb(0, 0, 0);
+            min-height: 100%;
+            width: 100%;
+            display: grid;
+            place-content: center;
+            justify-items: center;
+        }
+
+        body * {
+            font-family: "Chakra Petch", sans-serif;
+            color: rgb(146, 255, 255);
+        }
+
+        #Absolute-Date *,
+        #Absolute-Date {
+            font-size: 10vh;
+            text-shadow: 0px 0px 80vw rgb(0, 255, 255);
+        }
+
+        #Time *,
+        #Time {
+            text-shadow: 0px 0px 50vw rgb(0, 255, 255);
+            font-size: 40vh;
+
+        }
+
+        :root {
+            --cyan: rgb(146, 255, 255);
+        }
+
+        .wake,
+        .addButton,
+        .delete {
+            background: black;
+            box-shadow: 0 0 10px var(--cyan);
+            outline: none;
+            padding: 2vh 2vw;
+            border-radius: 2vh;
+        }
+
+        .wake:hover,
+        .addButton:hover,
+        .delete:hover {
+            background: var(--cyan);
+            color: black;
+            outline: none;
+
+        }
+
+
+
+        .alarms {
+            list-style: none;
+        }
+
+        .add,
+        .alarm {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            place-content: center;
+            place-items: center;
+        }
+
+        input {
+            background-color: black;
+        }
+
+        li {
+            padding: 2vh 2vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="Absolute-Date">
+        <span class="Year"></span>-<span class="Month"></span>-<span class="Date"></span>&nbsp;&nbsp;&nbsp;<span
+            class="Day"></span>
+    </div>
+    <div id="Time">
+        <span class="Hour"></span>:<span class="Minute"></span>: <span class="Second"></span>
+    </div>
+    <div class="alarmsArea">
+        <button class="wake">
+            Click me to allow Alarms
+        </button>
+        <ul class="alarms" hidden>
+            <li class="add">
+                <input class="Hours" data-max="23">
+                :
+                <input class="Minutes" data-max="59">
+                <button class="addButton">
+                    Add
+                </button>
+            </li>
+            <li class="alarm">
+
+            </li>
+        </ul>
+    </div>
+
+
+    <script>
+
+        let check = () => { }
+
+        function Time(num) {
+            num = num === undefined ? 0 : num
+            return num.toString().padStart(2, '0')
+        }
+
+        document.querySelector('.wake').onclick = event => {
+            event.target.hidden = true;
+            event.target.nextElementSibling.hidden = false;
+            check = (time) => {
+                let minutes = time.getMinutes().toString().padStart(2, '0')
+                let hours = time.getHours().toString().padStart(2, '0')
+                let alarmsArray = getAlarmsArray()
+                let minutesArray = alarmsArray.map(alarms => {
+                    return alarms.minutes.toString().padStart(2, '0')
+                })
+                let hoursArray = alarmsArray.map(alarms => {
+                    return alarms.hours.toString().padStart(2, '0')
+                })
+
+                if (
+                    minutesArray.includes(minutes)
+                    &&
+                    hoursArray.includes(hours)
+                    &&
+                    time.getSeconds() === 0
+                ) {
+                    let audio = document.createElement('audio')
+                    document.body.appendChild(audio)
+                    audio.loop = true
+                    audio.autoplay = true
+                    audio.src = 'alarm.mp3'
+                    setTimeout(() => {
+                        audio.remove()
+                    }, 300000)
+                }
+
+            }
+        }
+
+
+
+
+        let getBaseAlarm = () => {
+            let BaseAlarm = document.createElement('li')
+            BaseAlarm.className = 'alarm'
+            BaseAlarm.innerHTML = `
+                    <span class="Hours">
+                        00
+                    </span>
+                    :
+                    <span class="Minutes">
+                        00
+                    </span>
+                <button class="delete">
+                    Delete
+                </button>`
+            return BaseAlarm
+        }
+
+        let getAlarmsArray = () => {
+            if (localStorage.getItem('alarms') === null) {
+                localStorage.setItem('alarms', JSON.stringify([]))
+                return []
+            }
+            else {
+                return JSON.parse(localStorage.getItem('alarms'))
+            }
+        }
+
+        function setAlarmsArray(alarmsArray) {
+            localStorage.setItem('alarms', JSON.stringify(alarmsArray))
+        }
+
+        function refreshAlarms() {
+            let Alarms = Array.from(document.querySelector('ul.alarms').children)
+            Alarms = Alarms.filter(alarm => alarm !== Alarms[0])
+            let newAlarmsArray = Alarms.map(alarm => {
+                if (alarm.innerHTML === '\n\n            ') {
+                    alarm.remove()
+                    return
+                }
+                else {
+                    return {
+                        minutes: `${Time(alarm.querySelector('.Minutes').innerHTML)}`,
+                        hours: `${Time(alarm.querySelector('.Hours').innerHTML)}`
+                    }
+                }
+            }
+
+
+            )
+            setAlarmsArray(newAlarmsArray)
+        }
+
+        function deleteAlarm(event) {
+            event.target.parentElement.remove()
+            refreshAlarms()
+        }
+
+        function loadNewAlarm(AlarmObj) {
+            let Alarm = getBaseAlarm()
+            Alarm.querySelector('.Minutes').innerHTML = Time(AlarmObj.minutes)
+            Alarm.querySelector('.Hours').innerHTML = Time(AlarmObj.hours)
+            let newAlarmsArray = getAlarmsArray()
+            newAlarmsArray.push(AlarmObj)
+            setAlarmsArray(newAlarmsArray)
+            Alarm.querySelector('.delete').onclick = deleteAlarm
+            document.querySelector('ul.alarms').appendChild(Alarm)
+        }
+
+        document.querySelector('.addButton').onclick = (event) => {
+            let AlarmsObj = {
+                minutes: Time(event.target.parentElement.querySelector('.Minutes').value),
+                hours: Time(event.target.parentElement.querySelector('.Hours').value)
+            }
+            event.target.parentElement.querySelector('.Minutes').value = ''
+            event.target.parentElement.querySelector('.Hours').value = ''
+            loadNewAlarm(AlarmsObj)
+        }
+
+        document.body.onload = () => {
+            let AlarmsArray = getAlarmsArray()
+            AlarmsArray.forEach(AlarmObj => {
+                let Alarm = getBaseAlarm()
+                Alarm.querySelector('.Minutes').innerHTML = AlarmObj.minutes
+                Alarm.querySelector('.Hours').innerHTML = AlarmObj.hours
+                Alarm.querySelector('.delete').onclick = deleteAlarm
+                document.querySelector('ul.alarms').appendChild(Alarm)
+            })
+        }
+
+        Array.from(document.querySelectorAll('*[data-max]')).forEach(
+            input => {
+                input.oninput = event => {
+                    let value = Number.parseInt(event.target.value)
+                    if (value > Number.parseInt(event.target.dataset.max) || value < 0) {
+                        event.target.value = event.target.value.substr(0, event.target.value.length - 1)
+
+                    }
+
+
+                }
+
+            }
+        )
+
+
+
+        const Set = (id, time) => {
+            document.querySelector(`.${id}`).innerHTML = time;
+        }
+
+        let x = new Date();
+        Set("Date", ("" + x.getDate()).padStart(2, '0'));
+        Set("Month", ("" + (x.getMonth() + 1)).padStart(2, '0'));
+        Set("Year", ("" + x.getFullYear()).padStart(4, '0'));
+        Set("Hour", ("" + x.getHours()).padStart(2, '0'));
+        Set("Minute", ("" + x.getMinutes()).padStart(2, '0'));
+        Set("Second", ("" + x.getSeconds()).padStart(2, '0'));
+        Set("Day", ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][x.getDay()]);
+
+        setInterval(function () {
+            x = new Date()
+            check(x)
+            Set("Date", ("" + x.getDate()).padStart(2, '0'));
+            Set("Month", ("" + (x.getMonth() + 1)).padStart(2, '0'));
+            Set("Year", ("" + x.getFullYear()).padStart(4, '0'));
+            Set("Hour", ("" + x.getHours()).padStart(2, '0'));
+            Set("Minute", ("" + x.getMinutes()).padStart(2, '0'));
+            Set("Second", ("" + x.getSeconds()).padStart(2, '0'));
+            Set("Day", ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][x.getDay()]);
+        }, 1000);
+
+    </script>
+</body>
+
+</html>

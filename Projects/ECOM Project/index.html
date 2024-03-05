@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECOM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lobster Two', sans-serif;
+            text-align: center;
+        }
+
+        body {
+            background: url('IMG/BG.jpg');
+        }
+
+        .Header a {
+            display: grid;
+            place-items: center;
+            text-decoration: none;
+            color: aliceblue;
+            transition: color 200ms linear 0s;
+            font-size: 4vh;
+        }
+
+
+
+        .Header a:hover {
+            color: orangered;
+        }
+
+        .Header li {
+            display: grid;
+            place-items: center;
+            width: 100%;
+
+        }
+
+
+
+        .Header ul {
+            display: grid;
+            place-items: center;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            background: rgb(67, 67, 67);
+            height: 10vh;
+        }
+
+        main {
+            display: grid;
+            grid-template-rows: 1fr 1fr 1fr;
+            height: 50vh;
+        }
+
+        .Title {
+            margin-top: 10vh;
+            display: grid;
+            font-size: 10vh;
+            font-weight: 100;
+            place-items: center;
+            width: 100%;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 9fr;
+            place-items: center;
+            place-content: center;
+        }
+
+        .options img {
+            filter: invert(1);
+            height: 3vh;
+        }
+
+        .search {
+            width: 100%;
+        }
+
+        .inputSearch {
+            width: 60%;
+            height: 4.5vh;
+        }
+
+        .searchIcon {
+            width: 15%;
+            border-top-right-radius: 1vh;
+            border-bottom-right-radius: 1vh;
+            height: 5vh;
+            background-color: orangered;
+            color: aliceblue;
+            position: relative;
+            right: 4px;
+            top: 1px;
+            display: inline-grid;
+            place-content: center;
+        }
+
+        .CategoryDropdown {
+            border-top-left-radius: 1vh;
+            border-bottom-left-radius: 1vh;
+            display: inline-block;
+            position: relative;
+            width: 20%;
+            height: 5vh;
+            left: 4px;
+            bottom: 0.5px;
+
+        }
+
+        .Deals {
+            height: 100%;
+            width: 100vw;
+            display: grid;
+            place-content: center;
+            place-items: center;
+        }
+
+        .Deals div {
+            display: grid;
+            place-content: center;
+            font-size: 10vw;
+        }
+
+        .Deals button {
+            height: 10vh;
+            width: 40vw;
+            font-size: 3vh;
+            background-color: orangered;
+            color: aliceblue;
+            border-radius: 2vh;
+        }
+
+        header {
+            position: fixed;
+            width: 100vw;
+            z-index: 1;
+        }
+
+        .Trending {
+            display: grid;
+            grid-template-rows: 1fr 1fr 1fr;
+            height: 150vh;
+            margin-top: 30vh;
+        }
+
+        .Fashion .card {
+            background-color: #fff;
+            width: 80vw;
+            display: grid;
+            place-content: center;
+            place-items: center;
+            border: 2vh solid rgb(237, 237, 237);
+        }
+
+        .Fashion {
+            display: grid;
+            grid-template-rows: 1fr 10fr;
+        }
+
+        .cardTitle {
+            font-size: 8vh;
+            display: grid;
+            place-content: center;
+            place-items: center;
+            margin-top: 10vh;
+        }
+
+
+        .cardsGroup {
+            display: grid;
+            place-content: center;
+            place-items: center;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 2vh;
+        }
+
+        .skirt{
+            position: relative;
+            bottom: 8px;
+        }
+        .tshirt{
+            position: relative;
+            top: 1px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="Header">
+        <ul>
+            <li><a href="#">Best<wbr>Sellers</a></li>
+            <li><a href="#">Gift<wbr>Ideas</a></li>
+            <li><a href="#">New<wbr>Releases</a></li>
+            <li><a href="#">Today's<wbr>Deals</a></li>
+            <li><a href="#">Customer<wbr>Service</a></li>
+        </ul>
+    </header>
+    <main>
+        <div class="Title">ECOM</div>
+        <div class="options">
+            <img src="https://themewagon.github.io/eflyer/images/toggle-icon.png">
+            <div class="search">
+                <select class="CategoryDropdown">
+                    <option>All</option>
+                    <option>Sports</option>
+                    <option>Casual Wear</option>
+                    <option>Formal Wear</option>
+                    <option>Stationary</option>
+                </select>
+                <input type="text" class="inputSearch" placeholder="Search">
+                <span class="searchIcon">
+                    Q
+                </span>
+            </div>
+        </div>
+
+        <div class="Deals">
+            <div>
+                Get started with<wbr>your favorite deals
+            </div>
+            <button>Buy Now</button>
+        </div>
+
+
+
+        </div>
+
+    </main>
+
+    </div>
+
+    <div class="Trending">
+
+        <div class="Fashion">
+            <div class="FashionTitle cardTitle tshirt">
+                Men & Women Fashion
+            </div>
+            <div class="cardsGroup">
+                <div class="card tshirt">
+                    <div class="TitleAndPrice">T-Shirt <br> Price : 30$</div>
+                    <img src="https://themewagon.github.io/eflyer/images/tshirt-img.png">
+                </div>
+                <div class="card shirt">
+                    <div class="TitleAndPrice">Shirt <br> Price : 30$</div>
+                    <img src="https://themewagon.github.io/eflyer/images/dress-shirt-img.png">
+                </div>
+                <div class="card skirt">
+                    <div class="TitleAndPrice">Skirt <br> Price: 30$</div>
+                    <img src="https://themewagon.github.io/eflyer/images/women-clothes-img.png">
+                </div>
+            </div>
+        </div>
+        <div class="Fashion">
+            <div class="FashionTitle cardTitle">
+                Electronics
+            </div>
+            <div class="cardsGroup">
+                <div class="card">
+                    <div class="TitleAndPrice">Laptop <br> Start Price : 100$</div>
+                    <img src="https://themewagon.github.io/eflyer/images/laptop-img.png">
+                </div>
+                <div class="card">
+                    <div class="TitleAndPrice">Mobile <br> Start Price : 100$</div>
+                    <img src="https://themewagon.github.io/eflyer/images/mobile-img.png">
+                </div>
+                <div class="card">
+                    <div class="TitleAndPrice">Computer <br> Start Price : 100$</div>
+                    <img src="https://themewagon.github.io/eflyer/images/computer-img.png">
+                </div>
+            </div>
+        </div>
+        <div class="Fashion">
+            <div class="FashionTitle cardTitle">
+                Jewellery
+            </div>
+            <div class="cardsGroup">
+                <div class="card">
+                    <div class="TitleAndPrice">Earrings <br> Price : 100$</div>
+                    <img src="https://themewagon.github.io/eflyer/images/jhumka-img.png">
+                </div>
+                <div class="card">
+                    <div class="TitleAndPrice">Necklace <br> Price : 30$</div>
+                    <img src="https://themewagon.github.io/eflyer/images/neklesh-img.png">
+                </div>
+                <div class="card">
+                    <div class="TitleAndPrice">Bangles <br> Price: 30$</div>
+                    <img src="https://themewagon.github.io/eflyer/images/kangan-img.png">
+                </div>
+            </div>
+        </div>
+
+
+</body>
+
+</html>

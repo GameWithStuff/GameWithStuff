@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset=" UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack email</title>
+    <style>
+        body,
+        html {
+            margin: 0px;
+            height: 100vh;
+            width: 100vw;
+            background-color: black;
+        }
+
+        * {
+            outline: none;
+            overflow-x: hidden;
+            margin: 2vh;
+            margin-bottom: 5vh;
+            border-color: black;
+            background-color: black;
+            color: lime;
+            text-shadow: 0px 0px 2vh rgba(0, 255, 0, 1);
+        }
+
+
+
+        ::-webkit-scrollbar {
+            background: #000;
+            /* display: none; */
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+            /* display: none; */
+        }
+
+        .span1 {
+            display: block;
+        }
+
+        .Username {
+            margin: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <span class="span1">
+        Initializing Hack Program...
+    </span>
+    <div hidden class="FillNeeded">
+        Accessing Username (<span class="Username"></span>)...
+    </div>
+    <div hidden class="FillNeeded">
+        Username (<span class="Username"></span>) Found...
+    </div>
+    <div hidden>
+        Accessing Password...
+    </div>
+    <div hidden>
+        Password Found...
+    </div>
+    <div hidden class="FillNeeded">
+        Password saved as <span class="Username"></span>.txt...
+    </div>
+    <div hidden>
+        Hack Program Successful !!!
+    </div>
+    <script>
+        alert('This is all a joke')
+        let num
+        let User = prompt('Enter Username to be hacked')
+        let usernameSpans = document.querySelectorAll('.FillNeeded span')
+        let Main = async () => {
+            for (let div of document.getElementsByTagName('div')) {
+                // console.log(div)
+                let run = new Promise((resolve, reject) => {
+                    setTimeout(function () {
+                        div.hidden = false
+                        if (div.classList.contains('FillNeeded')) {
+                            for (let span of usernameSpans) {
+                                span.textContent = User
+                            }
+                        }
+                        resolve(null)
+                    }, Math.floor(Math.random() * 3000 + 1000))
+                })
+                num = await run
+            }
+        }
+        Main()
+    </script>
+</body>
+
+</html>

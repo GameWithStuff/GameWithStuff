@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lobster Two', sans-serif;
+
+        }
+
+        body {
+            background-image: url(IMG/BG.png);
+            min-height: 100vh;
+            /* background-repeat: no-repeat; */
+        }
+
+        .Header a {
+            display: grid;
+            place-items: center;
+            text-decoration: none;
+            color: aliceblue;
+            transition: color 200ms linear 0s;
+            font-size: 3vh;
+        }
+
+        @media screen and (min-width: 768px) {
+            .Header a {
+            font-size: 4vh;
+            }
+        }
+
+        .Header a:hover {
+            color: aqua;
+        }
+
+        .Header li {
+            display: grid;
+            place-items: center;
+            width: 100%;
+
+        }
+
+        .Header ul {
+            display: grid;
+            place-items: center;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            background: rgb(67, 67, 67);
+            height: 8vh;
+        }
+
+        header {
+            position: fixed;
+            width: 100vw;
+            z-index: 1;
+        }
+
+        li.img img {
+            filter: invert(1);
+            height: 5vh;
+
+        }
+
+        li.img img:hover {
+            filter: invert(0);
+            transition: filter 200ms linear 0s;
+        }
+
+        .playlist ul {
+
+            display: grid;
+            grid-template-rows: repeat(5, 1fr);
+            height: 75vh;
+            width: 100vw;
+            padding-top: 10vh;
+            /* background-color: black;
+            comment */
+            position: relative;
+            place-items: center;
+
+
+        }
+
+        .song {
+            display: grid;
+            place-items: center;
+            width: 98%;
+            place-content: center;
+            grid-template-columns: 1fr 3fr 1fr;
+            border-radius: 2vh;
+            /* border: 2px solid white; */
+            background-color: rgb(90, 102, 102);
+            height: 12vh;
+        }
+
+        .song img {
+            border-radius: 2vh;
+            height: 10vh;
+        }
+
+        p.name {
+            color: aliceblue;
+            font-size: 4vh;
+        }
+
+        .play {
+            height: 10vh;
+            width: 10vh;
+            background-color: rgb(64, 72, 72);
+            border-radius: 2vh;
+            border: none;
+            transition: background-color 200ms linear 0s;
+
+        }
+
+        .play:hover {
+            background-color: rgb(40, 45, 45);
+
+        }
+
+        .play img {
+            height: 8vh;
+            filter: invert(1);
+        }
+
+        .r1b3 img {
+            height: 5vh;
+            filter: invert(1);
+            transition: filter 200ms linear 0s;
+
+        }
+
+        .player {
+            display: grid;
+            height: 20vh;
+            margin: 1vh 1vw;
+            background-color: #1a1a1a;
+            border-radius: 2vh;
+            grid-template-rows: 1fr 2fr;
+            place-content: center;
+            place-items: center;
+            width: 98vw;
+
+        }
+
+        audio {
+            height: 7vh;
+            width: 90vw;
+        }
+
+        .songname{
+            color: white;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header class="Header">
+        <ul>
+            <li class="img"> <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Spotify_logo_with_text.svg/1200px-Spotify_logo_with_text.svg.png">
+            </li>
+            <li><a href="#">Trending</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Create</a></li>
+        </ul>
+    </header>
+    <main class="playlist">
+        <ul>
+            <li class="song">
+                <img
+                    src="https://upload.wikimedia.org/wikipedia/en/b/b4/Shape_Of_You_%28Official_Single_Cover%29_by_Ed_Sheeran.png">
+                <p class="name">Shape Of You</p>
+                <button class="play shapeofyou" id="shapeofyou"><img src="IMG/Play.png"></button>
+            </li>
+            <li class="song">
+                <img src="https://i.scdn.co/image/ab67616d0000b2730ae4f4d42e4a09f3a29f64ad">
+                <p class="name">The Nights</p>
+                <button class="play thenights" id="thenights"><img src="IMG/Play.png"></button>
+            </li>
+            <li class="song">
+                <img src="https://i.scdn.co/image/ab67616d0000b27348308c9b8aaf8ff8d91812a5">
+                <p class="name">Sea Shanty</p>
+                <button class="play seashanty" id="seashanty"><img src="IMG/Play.png"></button>
+            </li>
+            <li class="song">
+                <img src="https://c.saavncdn.com/164/Super-Shy-Remix-Korean-2023-20230725072832-500x500.jpg">
+                <p class="name">Super Shy</p>
+                <button class="play supershy" id="supershy"><img src="IMG/Play.png"></button>
+            </li>
+            <li class="song">
+                <img src="https://i.scdn.co/image/ab67616d0000b27380eddf5b23365a3280667d21">
+                <p class="name">Night Dancer</p>
+                <button class="play nightdancer" id="nightdancer"><img src="IMG/Play.png"></button>
+            </li>
+        </ul>
+    </main>
+    <div class="player">
+        <div class="songname">
+            Night Dancer
+        </div>
+        <audio controls src="Songs/nightdancer.mp3" frameborder="0" data-playing="nightdancer"></audio>
+
+    </div>
+
+    <script src="index.js" >
+    </script>
+
+</body>
+</html>

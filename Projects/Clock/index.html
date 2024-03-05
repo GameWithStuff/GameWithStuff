@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500&display=swap" rel="stylesheet" />
+    <style>        html,
+        body {
+            background-color: black;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            display: grid;
+            place-content: center;
+            justify-items: center;
+        }
+
+        body * {
+            font-family: "Chakra Petch", sans-serif;
+            color: rgb(146, 255, 255);
+        }
+
+        #Absolute-Date *,
+        #Absolute-Date {
+            font-size: 10vh;
+            text-shadow: 0px 0px 80vw rgb(0, 255, 255);
+        }
+
+        #Time *,
+        #Time {
+            text-shadow: 0px 0px 50vw rgb(0, 255, 255);
+            font-size: 40vh;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="Absolute-Date">
+        <span class="Year"></span>-<span class="Month"></span>-<span class="Date"></span>&nbsp;&nbsp;&nbsp;<span
+            class="Day"></span>
+    </div>
+    <div id="Time">
+        <span class="Hour"></span>:<span class="Minute"></span>: <span class="Second"></span>
+    </div>
+    <script>
+                const Set = (id, time) => {
+            document.querySelector(`.${id}`).innerHTML = time;
+        }
+        
+        let x = new Date();
+        Set("Date", (""+x.getDate()).padStart(2,'0'));
+        Set("Month", (""+(x.getMonth() + 1)).padStart(2,'0'));
+        Set("Year", (""+x.getFullYear()).padStart(4,'0'));
+        Set("Hour", (""+x.getHours()).padStart(2,'0'));
+        Set("Minute", (""+x.getMinutes()).padStart(2,'0'));
+        Set("Second", (""+x.getSeconds()).padStart(2,'0'));
+        Set("Day", ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][x.getDay()]);
+
+        setInterval(function () {
+            x = new Date()
+            Set("Date", (""+x.getDate()).padStart(2,'0'));
+            Set("Month", (""+(x.getMonth() + 1)).padStart(2,'0'));
+            Set("Year", (""+x.getFullYear()).padStart(4,'0'));
+            Set("Hour", (""+x.getHours()).padStart(2,'0'));
+            Set("Minute", (""+x.getMinutes()).padStart(2,'0'));
+            Set("Second", (""+x.getSeconds()).padStart(2,'0'));
+            Set("Day", ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][x.getDay()]);
+        }, 1000);
+        
+    </script>
+</body>
+
+</html>
