@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow-y: hidden;
+        }
+
+
+    </style>
+    <title>Graphify</title>
+</head>
+
+<body>
+    <canvas></canvas>
+    <script>
+        const run = async () => {
+            let m = 4.725
+            const canvas = document.querySelector('canvas')
+            const c = canvas.getContext('2d')
+            canvas.height = window.innerHeight
+            const getdata = async () => {
+                return await (await fetch('data.json')).json()
+            }
+            const data = await getdata()
+            console.log(data)
+            console.log(data)
+            const width = 100
+
+            class bar {
+                constructor(x, y, height) {
+                    this.height = height
+                    this.x = x
+                    this.y = y
+                }
+                create() {
+                    c.fillStyle = 'orangered'
+                    c.fillRect(this.x, this.y, width, this.height)
+                    c.font = '30px Arial'
+                    c.fillStyle = 'white'
+
+                    c.fillText(this.height / m, this.x + 10, this.y + 30)
+                }
+            }
+            const properties = Object.keys(data).filter(
+                key => data[key] <= 100
+            )
+            canvas.width = 200 * properties.length + 100
+            if (200 * properties.length + 100 < window.innerWidth) {
+                canvas.width = window.innerWidth
+            }
+            let bars = []
+            for (let i in properties) {
+                let property = properties[i]
+                let x = i * 200 + 100
+                let height = data[property] * m
+                let y = innerHeight - height - 48
+                let currentBar = new bar(x, y, height)
+                currentBar.create()
+                c.fillStyle = 'orangered'
+                c.fillText(property, x, innerHeight - 20)
+            }
+
+
+
+        }
+        run()
+    </script>
+</body>
+
+</html>
