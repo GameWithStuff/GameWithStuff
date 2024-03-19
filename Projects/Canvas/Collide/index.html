@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncy Ball</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            box-sizing: border-box;
+            overflow: hidden;
+            background-color: tomato;
+            position: absolute;
+            z-index: -100;
+            top: 0;
+            bottom: 0;
+            /* border: 30px dotted red; */
+            /* resize: both; */
+
+        }
+    </style>
+</head>
+
+
+<body>
+    <canvas></canvas>
+</body>
+<script>
+    const canvas = document.querySelector('canvas')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    let c = canvas.getContext('2d')
+
+    class arc {
+        constructor(x, y, r, startDeg, endDeg, clockwise, strokeStyle, fillStyle, lineThickness) {
+            this.x = x
+            this.y = y
+            this.startDeg = startDeg
+            this.endDeg = endDeg * Math.PI / 180
+            this.r = r
+            this.or = r
+            this.clockwise = !!clockwise
+            this.lineThickness = lineThickness
+            this.fillStyle = fillStyle
+            this.strokeStyle = strokeStyle
+        }
+
+
+        static random(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        create() {
+            // console.log('creating')
+            c.beginPath()
+            c.arc(this.x, this.y, this.r, this.startDeg, this.endDeg, this.clockwise)
+            this.cStrokeStyle = c.strokeStyle
+            c.strokeStyle = this.strokeStyle
+            this.cFillStyle = c.fillStyle
+            c.fillStyle = this.fillStyle
+            this.cLineThickness = c.lineThickness
+            c.lineThickness = this.lineThickness
+            c.closePath()
+            c.fill()
+            c.stroke()
+            c.fillStyle = this.cFillStyle
+            c.strokeStyle = this.cStrokeStyle
+            c.lineThickness = this.cLineThickness
+        }
+    }
+
+    function distance(move) {
+        let cdisx = Math.abs(move.x - stationary.x)
+        let cdisy = Math.abs(move.y - stationary.y)
+        let dis = Math.sqrt(cdisx ** 2 + cdisy ** 2) - (move.r + stationary.r)
+        return dis
+    }
+
+    let follow = () => {
+        move.x = mouse.x
+        move.y = mouse.y
+    }
+
+
+    let move = new arc(
+        100, 100, 50, 0, 360, false, 'rgba(0,0,0,0)', 'cyan', 1
+    )
+    let stationary = new arc(
+        innerWidth / 2, innerHeight / 2, 100, 0, 360, false, 'rgba(0,0,0,0)', 'lime', 1
+    )
+
+    let mouseOn = false
+
+
+
+
+    // console.log(ball)
+    const mouse = {
+        x: undefined,
+        y: undefined,
+        r: 50
+    }
+
+    let animate = () => {
+        requestAnimationFrame(animate)
+        c.clearRect(0, 0, canvas.width, canvas.height)
+        if (distance(move) <= 0) {
+            move.fillStyle = 'steelblue'
+            stationary.fillStyle = 'steelblue'
+        } else {
+            move.fillStyle = 'aqua'
+            stationary.fillStyle = 'lime'
+
+        }
+        // if (distance(mouse) >= -1) {
+            follow()
+        // }
+        // else if (distance(move) <= 0) {
+        //     if (mouse.x > move.x) {
+        //         move.x += 5
+        //     }
+        //     else if (mouse.x == move.x){
+
+        //     }
+        //     else {
+        //         move.x -= 5
+        //     }
+        //     if (mouse.y > move.x) {
+        //         move.y += 5
+        //     }
+        //     else if (mouse.y == move.y){
+                
+        //     }
+        //     else {
+        //         move.y -= 5
+        //     }
+        // }
+        stationary.create()
+        move.create()
+    }
+    animate()
+
+    canvas.onmousemove = (e) => {
+        mouse.x = e.clientX
+        mouse.y = e.clientY
+        // console.log(mouse)
+    }
+
+    window.onresize = () => {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+    }
+    canvas.onmouseover = e => mouseOn = true
+    canvas.onmouseout = e => mouseOn = false
+</script>
+
+</html>

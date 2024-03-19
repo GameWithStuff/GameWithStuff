@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car</title>
+    <audio src="drag-racing-2-6842.mp3" autoplay loop></audio>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            background-image: url('https://i.gifer.com/Lggv.gif');
+            height: 100vh;
+            width: 100vw;
+            background-size: 100vw 100vh;
+            background-repeat: no-repeat;
+            overflow: hidden;
+            /* transform: scaleX(-1); */
+        }
+
+        .road {
+            width: 300vw;
+            height: 26vh;
+            position: absolute;
+            top: 68vh;
+            background-size: 200vw 26vh;
+            left: -100vw;
+            animation: road 1s linear 0s infinite normal;
+            /* transform: scaleX(-1); */
+
+        }
+
+        @keyframes road {
+            from {
+                left: -100vw;
+            }
+
+            to {
+                left: -200vw;
+            }
+        }
+
+        .car {
+            position: absolute;
+            top: 47vh;
+            left: 0vw;
+            z-index: 1;
+            transform: scaleX(-1);
+
+        }
+
+        .wheel2 {
+            position: absolute;
+            top: 70.5vh;
+            left: 5.5vw;
+            z-index: 11;
+            height: 12vh;
+            animation: roll 300ms linear 0s infinite normal;
+            transform: scaleX(-1);
+
+        }
+
+        .wheel1 {
+            position: absolute;
+            top: 72vh;
+            left: 26.5vw;
+            z-index: 2;
+            height: 11vh;
+            animation: roll 300ms linear 0s infinite normal;
+            transform: scaleX(-1);
+
+        }
+
+        @keyframes roll {
+            from {
+                rotate: 0deg;
+            }
+
+            to {
+                rotate: 360deg;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+
+
+    </main>
+    <img src="IMG/Road.jpg" class="road">
+    <div class="cardiv">
+        <img src="IMG/Car.png" class="car">
+        <img src="IMG/Wheel.png" class="wheel1">
+        <img src="IMG/Wheel.png" class="wheel2">
+    </div>
+</body>
+
+</html>

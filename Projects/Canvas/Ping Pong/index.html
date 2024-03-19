@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+
+        canvas {
+            border: 1px solid white;
+        }
+
+        div>span {
+            color: white;
+            width: 100%;
+            display: grid;
+            place-content: center;
+        }
+
+        .tab {
+            height: calc(100%/8);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas>
+    </canvas>
+    <div class="tab">
+        <span class="score">Score:0</span>
+        <span class="playing"></span>
+    </div>
+    <script>
+        let canvas = document.querySelector('canvas')
+        let c = canvas.getContext('2d')
+        canvas.height = window.innerHeight
+        canvas.width = window.innerWidth
+        function random(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        let mouse = {
+            x: 10,
+            y: 10
+        }
+        class Box {
+            constructor(x, y, width, height, color) {
+                this.x = x
+                this.y = y
+                this.width = width
+                this.height = height
+                this.color = color
+            }
+            stroke() {
+                this.oc = c.strokeStyle
+                c.strokeStyle = color
+                c.strokeRect(this.x, this.y, this.width, this.height)
+                c.strokeStyle = this.oc
+            }
+            fill() {
+                this.oc = c.fillStyle
+                c.fillStyle = this.color
+                c.fillRect(this.x, this.y, this.width, this.height)
+                c.fillStyle = this.oc
+            }
+        }
+        class Ball {
+            constructor(x, y, r, startDeg, endDeg, clockwise, fillStyle) {
+                this.x = x
+                this.y = y
+                this.startDeg = startDeg
+                this.endDeg = endDeg * Math.PI / 180
+                this.r = r
+                this.clockwise = !!clockwise
+                this.fillStyle = fillStyle
+            }
+
+
+            static random(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+            create() {
+                // console.log('creating')
+                c.beginPath()
+                c.arc(this.x, this.y, this.r, this.startDeg, this.endDeg, this.clockwise)
+                this.cStrokeStyle = c.strokeStyle
+                c.strokeStyle = this.strokeStyle
+                this.cFillStyle = c.fillStyle
+                c.fillStyle = this.fillStyle
+                this.cLineThickness = c.lineThickness
+                c.lineThickness = this.lineThickness
+                c.closePath()
+                c.fill()
+                c.stroke()
+                c.fillStyle = this.cFillStyle
+                c.strokeStyle = this.cStrokeStyle
+                c.lineThickness = this.cLineThickness
+            }
+        }
+        let box1
+        let box2
+        let bg1
+        let bg2
+        let ball
+        let step = 10
+        let score = 0
+        function init() {
+            canvas.height = window.innerHeight * 7 / 8
+            canvas.width = window.innerWidth
+            box1 = new Box(innerWidth - 50, 10, 40, 200, 'aqua')
+            box2 = new Box(5, 10, 40, 200, 'aqua')
+            bg1 = new Box(innerWidth - 50, 0, 40, innerHeight, 'steelblue')
+            bg2 = new Box(5, 0, 40, innerHeight, 'steelblue')
+            ball = new Ball(innerWidth / 2, innerHeight / 2, 40, 0, 360, false, 'red')
+            ball.dx = [step, -step][Math.ceil(Math.random())]
+            ball.dy = [step, -step][Math.ceil(Math.random())]
+        }
+        init()
+        // let touching = (ball, box) => {
+        //     let xt = (ball.x + ball.r >= box.x) && (box.x + box.width > ball.x)
+        //     let yt = (ball.y + ball.r >= box.y) && (box.y + box.height > ball.y)
+        //     return xt && yt
+        // }
+        let touching = (ball, box) => {
+            let xOverlap = (ball.x + ball.r >= box.x) && (ball.x - ball.r <= box.x + box.width);
+            let yOverlap = (ball.y + ball.r >= box.y) && (ball.y - ball.r <= box.y + box.height);
+            return xOverlap && yOverlap;
+        }
+        let frame
+        function animate() {
+            frame = requestAnimationFrame(animate)
+            c.clearRect(0, 0, canvas.width, canvas.height)
+            box1.y = mouse.y - box1.height / 2
+            box2.y = ball.y - box2.height / 2
+            if (ball.y + ball.r >= canvas.height || ball.y - ball.r <= 0) ball.dy *= -1
+            if (ball.x + ball.r >= canvas.width || ball.x - ball.r <= 0) ball.dx *= -1
+            ball.x += ball.dx
+            ball.y += ball.dy
+            if (touching(ball, box2)) ball.dx *= -1
+            else if (touching(ball, box1)) {
+                document.querySelector('.score').innerHTML = `Score:${++score}`
+                ball.dx *= -1
+            }
+            else if (touching(ball, bg1)) {
+                cancelAnimationFrame(frame)
+                document.querySelector('.playing').innerHTML = 'Game Over'
+            }
+
+            bg1.fill()
+            bg2.fill()
+            box1.fill()
+            box2.fill()
+            ball.create()
+        }
+        animate()
+        window.onresize = init
+        // canvas.onmouseover = e => mouseOn = true
+        // canvas.onmouseout = e => mouseOn = false
+
+        canvas.onmousemove = (e) => {
+            mouse.y = e.clientY
+            // console.log(mouse)
+        }
+    </script>
+</body>
+
+</html>

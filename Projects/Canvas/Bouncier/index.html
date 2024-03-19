@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncier Ball</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            box-sizing: border-box;
+            overflow: hidden;
+            background-color: black;
+            position: absolute;
+            z-index: -100;
+            top: 0;
+            bottom: 0;
+            /* border: 30px dotted red; */
+            /* resize: both; */
+
+        }
+    </style>
+</head>
+
+
+<body>
+    <canvas></canvas>
+</body>
+<script>
+    const canvas = document.querySelector('canvas')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    let c = canvas.getContext('2d')
+
+    let touching = (ball1, ball2) => {
+        let dx = Math.abs(ball1.x - ball2.x);
+        let dy = Math.abs(ball1.y - ball2.y);
+        let distance = Math.sqrt(dx ** 2 + dy ** 2);
+        return distance <= ball1.r + ball2.r;
+    }
+
+    class arc {
+        constructor(x, y, r, startDeg, endDeg, clockwise, strokeStyle, fillStyle, lineThickness) {
+            this.x = x
+            this.y = y
+            this.startDeg = startDeg
+            this.endDeg = endDeg * Math.PI / 180
+            this.r = r
+            this.or = r
+            this.clockwise = !!clockwise
+            this.lineThickness = lineThickness
+            this.fillStyle = fillStyle
+            this.strokeStyle = strokeStyle
+        }
+
+
+        static random(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        create() {
+            c.beginPath()
+            c.arc(this.x, this.y, this.r, this.startDeg, this.endDeg, this.clockwise)
+            this.cStrokeStyle = c.strokeStyle
+            c.strokeStyle = this.strokeStyle
+            this.cFillStyle = c.fillStyle
+            c.fillStyle = this.fillStyle
+            this.cLineThickness = c.lineThickness
+            c.lineThickness = this.lineThickness
+            c.closePath()
+            c.fill()
+            c.stroke()
+            c.fillStyle = this.cFillStyle
+            c.strokeStyle = this.cStrokeStyle
+            c.lineThickness = this.cLineThickness
+        }
+    }
+
+    let init = () => {
+        let balls = []
+        let number = 100
+        for (let i = 0; i < number; i++) {
+            // let step = 20
+            let step = arc.random(200, 400) / 100
+            // let r = 100
+            let r = arc.random(10, 20)
+            let color = [
+                "#FF6633",
+                "#FFB399",
+                "#FF33FF",
+                "#FFFF99",
+                "#00B3E6",
+                "#E6B333",
+                "#3366E6",
+                "#999966",
+                "#809980",
+                "#E6FF80",
+                "#1AFF33",
+                "#999933",
+                "#FF3380",
+                "#CCCC00",
+                "#66E64D",
+                "#4D80CC",
+                "#FF4D4D",
+                "#99E6E6",
+                "#6666FF"
+            ][arc.random(0, 17)]
+            let ball = new arc(
+                arc.random(2 * r, canvas.width - 2 * r),
+                arc.random(2 * r, canvas.height - 2 * r),
+                r,
+                0,
+                360,
+                true,
+                'rgba(0,0,0,0)',
+                [
+                    "#FF6633",
+                    "#FFB399",
+                    "#FF33FF",
+                    "#FFFF99",
+                    "#00B3E6",
+                    "#E6B333",
+                    "#3366E6",
+                    "#999966",
+                    "#809980",
+                    "#E6FF80",
+                    "#1AFF33",
+                    "#999933",
+                    "#FF3380",
+                    "#CCCC00",
+                    "#66E64D",
+                    "#4D80CC",
+                    "#FF4D4D",
+                    "#99E6E6",
+                    "#6666FF"
+                ][arc.random(0, 17)],
+                1
+            )
+
+            ball.o = 0
+
+            let goto = () => {
+                let isTouching;
+                do {
+                    ball.x = arc.random(2 * r, canvas.width - 2 * r);
+                    ball.y = arc.random(2 * r, canvas.height - 2 * r);
+                    isTouching = balls.some(target => touching(ball, target));
+                } while (isTouching);
+            }
+
+
+            goto()
+
+
+
+
+
+
+            ball.dx = [step, -step][Math.round(Math.random())]
+            ball.dy = [step, -step][Math.round(Math.random())]
+
+            balls.push(ball)
+        }
+    }
+
+    let animate = () => {
+        requestAnimationFrame(animate)
+        c.clearRect(0, 0, canvas.width, canvas.height)
+        balls.forEach((ball) => {
+            if (ball.x + ball.r > canvas.width) {
+                ball.x = canvas.width - ball.r;
+                ball.dx = -ball.dx;
+            } else if (ball.x - ball.r < 0) {
+                ball.x = ball.r;
+                ball.dx = -ball.dx;
+            }
+            if (ball.y + ball.r > canvas.height) {
+                ball.y = canvas.height - ball.r;
+                ball.dy = -ball.dy;
+            } else if (ball.y - ball.r < 0) {
+                ball.y = ball.r;
+                ball.dy = -ball.dy;
+            }
+            balls.forEach((ball1, index1) => {
+                balls.forEach((ball2, index2) => {
+                    if (index1 != index2 && touching(ball1, ball2)) {
+                        let dx = ball1.x - ball2.x;
+                        let dy = ball1.y - ball2.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        let overlap = (ball1.r + ball2.r) - distance;
+                        let angle = Math.atan2(dy, dx);
+                        ball1.x += Math.cos(angle) * overlap / 2;
+                        ball1.y += Math.sin(angle) * overlap / 2;
+                        ball2.x -= Math.cos(angle) * overlap / 2;
+                        ball2.y -= Math.sin(angle) * overlap / 2;
+                        let tempdx = ball1.dx;
+                        let tempdy = ball1.dy;
+                        ball1.dx = ball2.dx;
+                        ball1.dy = ball2.dy;
+                        ball2.dx = tempdx;
+                        ball2.dy = tempdy;
+                    }
+                });
+            });
+
+            ball.y += ball.dy
+            ball.x += ball.dx
+            ball.create()
+        })
+
+    }
+    animate()
+
+
+    window.onresize = () => {
+        canvas.width = window.innerWidth > 400 ? window.innerWidth : 400
+
+        canvas.height = window.innerHeight > 400 ? window.innerHeight : 400
+        init()
+    }
+</script>
+
+</html>

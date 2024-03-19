@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dear Deer</title>
+    <style>
+        canvas {
+            background-image: url(BG.gif);
+            background-size: contain;
+
+
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        img {
+            height: 100px;
+            position: relative;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Deer/1.png" id="Deer" hidden>
+    <canvas></canvas>
+    <img src="Tree.png" id="Tree" hidden>
+    <script>
+        window.onload = async () => {
+
+            let canvas = document.querySelector('canvas')
+            canvas.height = window.innerHeight
+            canvas.width = window.innerWidth
+            let c = canvas.getContext('2d')
+            let treeIMG = document.getElementById('Tree')
+            class Tree {
+                constructor() {
+                    // this.x = 100
+                    this.y = 320
+                    this.x = innerWidth - 50
+                }
+                create() {
+                    c.drawImage(treeIMG, this.x, this.y, 200, 200)
+                }
+            }
+            c.font = '30px Arial'
+            let deerIMG = document.getElementById('Deer')
+            console.log(deerIMG)
+            const deerv = 280
+            let deer = {
+                x: 100,
+                y: deerv,
+                frame: 1,
+                create() {
+                    this.frame = (this.frame) % 7 + 0.5
+                    deerIMG.src = `Deer/${Math.ceil(this.frame)}.png`
+                    c.drawImage(deerIMG, this.x, this.y, 200, 200)
+                },
+                v: 0,
+
+            }
+            let touching = () => {
+                if ((deer.x + 100 > tree.x && deer.x < tree.x + 100) && (deer.y + 100 > tree.y && deer.y < tree.y + 100)) {
+                    return true
+                }
+            }
+            let score = 0
+            let tree = new Tree()
+            function animate() {
+                let FrameID = requestAnimationFrame(animate)
+                c.clearRect(0, 0, innerWidth, innerWidth)
+
+                if (touching()) {
+                    cancelAnimationFrame(FrameID)
+                    canvas.style.backgroundImage = "url('https://images.pond5.com/retro-vintage-8-bit-game-footage-103262590_iconl.jpeg')"
+                    canvas.style.backgroundSize = 'cover'
+                } else {
+                    tree.create()
+                    deer.create()
+                    if (tree.x < -50) {
+                        tree.x = innerWidth + 50
+                        score++
+                    }
+                    tree.x -= 12
+                    if (deer.y <= deerv || deer.v < 0) {
+                        // console.log('done')
+                        deer.y += deer.v
+                        deer.v += 0.5
+                    }
+                    if (deer.y <= deerv) {
+                        deerIMG.src = 'Deer/6.png'
+                        deer.frame = 6
+
+                    }
+                    if (deer.y > deerv) {
+                        deer.y = deerv
+                        // deer.v = 30
+                    }
+                }
+                c.strokeStyle = '#fff'
+                c.strokeText(`Score: ${score}`,innerWidth/2-80,30)
+
+            }
+            animate()
+            window.onkeypress = e => {
+                if (e.key = 'space' && deer.y >= deerv) {
+                    deer.v = -15
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

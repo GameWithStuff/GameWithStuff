@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revolutionary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            background-color: rgba(0, 0, 0, 1);
+            position: fixed;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas></canvas>
+    <script>
+        const canvas = document.querySelector('canvas')
+        const c = canvas.getContext('2d')
+        class Line {
+            constructor(x, y, w, color, r, v, d) {
+                this.x = x
+                this.y = y
+                this.ox = x
+                this.oy = y
+                this.w = w
+                this.color = color
+                this.r = r
+                this.v = v
+                this.d = d
+                this.mx = x
+                this.my = y
+            }
+            draw() {
+                c.beginPath()
+                c.strokeStyle = this.color
+                c.lineWidth = this.w
+                c.moveTo(this.ox, this.oy)
+                c.lineTo(this.x, this.y)
+                c.stroke()
+            }
+            Pos(x, y) {
+                this.ox = this.x
+                this.oy = this.y
+                this.x = x
+                this.y = y
+                this.draw()
+            }
+            static random(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+        }
+        let mouse = {
+            x: innerWidth / 2,
+            y: innerHeight / 2,
+        }
+        let colors = [
+            "#9BF6FF", // Electric Blue
+            "#CAFFBF", // Tea Green
+            "#FDFFB6", // Cream
+            "#FFD6A5", // Sunset
+            "#FFADAD", // Melon
+            "#E57373", // Coral
+            "#BA68C8", // Lavender
+            "#90CAF9", // Baby Blue
+            "#4DB6AC", // Mint
+            "#DCE775", // Pale Yellow
+        ]
+        let lines
+        function init() {
+            canvas.height = window.innerHeight
+            canvas.width = window.innerWidth
+            lines = []
+            for (let x = 0; x < 60; x++) {
+                let line = new Line(
+                    mouse.x, mouse.y,
+                    Line.random(3, 3),
+                    colors[Line.random(0, 9)],
+                    Math.random() * Math.PI,
+                    Line.random(3, 30) / 100,
+                    Line.random(0, 120),
+                )
+                lines.push(line)
+            }
+            console.log(lines)
+        }
+        init()
+
+        function animate() {
+            c.fillStyle = 'rgba(1,1,1,0.1)'
+            c.fillRect(0, 0, innerWidth, innerHeight)
+            requestAnimationFrame(animate)
+            lines.forEach((line) => {
+                line.mx += (mouse.x - line.mx) * 0.05
+                line.my += (mouse.y - line.my) * 0.05
+                line.Pos(
+                    line.mx + (Math.cos(line.r) * line.d)
+                    , line.my + (Math.sin(line.r) * line.d)
+                )
+                line.r += line.v
+                line.draw()
+            })
+        }
+        animate()
+        window.onmousemove = (e) => {
+            // mouse.ox += (e.clientX - mouse.ox) * 0.05
+            // mouse.oy += (e.clientY - mouse.oy) * 0.05
+            mouse.x = e.clientX
+            mouse.y = e.clientY
+        }
+
+        window.onresize = init
+    </script>
+</body>
+
+</html>

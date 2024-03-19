@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheatSheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            display: grid;
+            place-content: center;
+
+        }
+
+        header {
+            width: 100%;
+            background-color: transparent;
+            /* background-color: black; */
+            display: grid;
+            grid-template-columns: 1fr 10fr;
+            place-content: center;
+        }
+
+        header img {
+            width: 10vw;
+
+        }
+
+        .code {
+            /* background-color: black; */
+            background-color: transparent;
+
+            color: hotpink;
+            position: relative;
+
+        }
+
+        .card {
+            display: grid;
+        }
+
+        .heading {
+            /* margin: 2vh 2vw; */
+            padding: 2vh 2vw;
+            background: transparent;
+            color: white;
+            
+        }
+
+        .code {
+            /* margin: 2vh 2vw; */
+            padding: 1vh 1vw;
+
+        }
+
+        .copy {
+            /* position: absolute; */
+            border: none;
+            /* margin: 2vh 2vw; */
+            /* background-color: black; */
+            background-color: transparent;
+
+            height: max(5vh, 5vw);
+            /* background-image: url('https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-vector-copy-icon-png-image_889395.jpg'); */
+            width: max(5vh, 5vw);
+        }
+
+        .copy img {
+            height: max(5vh, 5vw);
+
+        }
+
+        textarea {
+            resize: vertical;
+            border: 1px solid white;
+        }
+
+        .codeAndCopy {
+            /* background-color: black; */
+            background-color: transparent;
+
+            display: grid;
+            grid-template-columns: 1fr max(5vh, 5vw);
+        }
+
+        .card {
+            border: 5px solid gray;
+        }
+
+        .delete {
+            /* background-color: black; */
+            background-color: transparent;
+
+            color: white;
+        }
+
+        .create {
+            /* background-color: black; */
+            background-color: transparent;
+
+            color: white;
+            width: 100vw;
+            font-size: 10vh;
+        }
+
+        canvas {
+            background-color: rgba(0, 0, 0, 1);
+            position: fixed;
+            z-index: -1;
+        }
+
+        img{
+            filter: invert(1);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas></canvas>
+
+    <header>
+        <img src="https://cdn.iconscout.com/icon/free/png-256/free-copy-197-1172885.png"
+            alt="">
+        <h1>Create Your CheatSheet Here</h1>
+    </header>
+    <div class="cards">
+
+        <!-- <div class="card">
+            <textarea class="heading">
+        </textarea>
+            <pre class="codeAndCopy">
+            <textarea class="code">
+            </textarea>
+            <button class="copy"><img src="https://png.pngtree.com/png-vector/20190329/ourmid/pngtree-vector-copy-icon-png-image_889395.jpg" alt="">
+            </button>
+        </pre>
+            <button class="delete">
+                X
+            </button>
+        </div> -->
+    </div>
+    <button class="create">
+        +
+    </button>
+
+
+    <!-- <script src="index.js"></script> -->
+    <script>
+        document.querySelector('.create').onclick = () => {
+            createCard({
+                heading: '',
+                code: ''
+            })
+        }
+        let getArr = () => {
+            if (localStorage.getItem('arr') == null) {
+                localStorage.setItem('arr', '[]')
+                return []
+            }
+            return JSON.parse(localStorage.getItem('arr'))
+        }
+
+        let reloadArr = () => {
+            let arr = []
+            let headings = Array.from(document.querySelectorAll('.heading'))
+            let codes = Array.from(document.querySelectorAll('.code'))
+            console.log(headings, codes, 137)
+            for (let i = 0; i < Array.from(document.querySelectorAll('.card')).length; i++) {
+                // console.log(i)
+                let obj = {
+                    heading: headings[i].value,
+                    code: codes[i].value,
+                }
+                arr.push(obj)
+            }
+            setArr(arr)
+        }
+
+        let setArr = item => {
+            localStorage.setItem('arr', JSON.stringify(item))
+        }
+
+        let init = () => {
+            Array.from(document.querySelectorAll('.copy')).forEach((copy) => {
+                copy.onclick = e => {
+                    console.log(e.target)
+                    console.log(e.target.parentElement)
+                    console.log(e.target.parentElement.parentElement)
+                    console.log(e.target.parentElement.parentElement.firstElementChild)
+                    console.log(e.target.parentElement.parentElement.firstElementChild.value)
+                    navigator.clipboard.writeText(e.target.parentElement.parentElement.firstElementChild.value)
+                }
+            })
+            Array.from(document.querySelectorAll('textarea')).forEach(ta => {
+                ta.onchange = e => reloadArr()
+                // console.log(getArr())
+            })
+
+            Array.from(document.querySelectorAll('.delete')).forEach((del) => {
+                del.onclick = () => {
+                    del.parentElement.remove()
+                    reloadArr()
+                }
+            })
+
+        }
+        init()
+
+        let createCard = obj => {
+            let card = document.createElement('div')
+            card.className = 'card'
+            card.innerHTML = `<textarea class="heading" spellcheck="false"></textarea><pre class="codeAndCopy"><textarea spellcheck="false" class="code"></textarea><button class="copy"><img src="https://cdn.iconscout.com/icon/free/png-256/free-copy-197-1172885.png" alt=""></button></pre><button class="delete">X</button>`
+            card.querySelector('.heading').value = obj.heading
+            card.querySelector('.code').value = obj.code
+            document.querySelector('.cards').appendChild(card)
+            init()
+            reloadArr()
+            return card
+        }
+
+        getArr().forEach(
+            obj => createCard(obj)
+        )
+
+        const canvas = document.querySelector('canvas')
+        const c = canvas.getContext('2d')
+        class Line {
+            constructor(x, y, w, color, r, v, d) {
+                this.x = x
+                this.y = y
+                this.ox = x
+                this.oy = y
+                this.w = w
+                this.color = color
+                this.r = r
+                this.v = v
+                this.d = d
+                this.mx = x
+                this.my = y
+            }
+            draw() {
+                c.beginPath()
+                c.strokeStyle = this.color
+                c.lineWidth = this.w
+                c.moveTo(this.ox, this.oy)
+                c.lineTo(this.x, this.y)
+                c.stroke()
+            }
+            Pos(x, y) {
+                this.ox = this.x
+                this.oy = this.y
+                this.x = x
+                this.y = y
+                this.draw()
+            }
+            static random(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+        }
+        let mouse = {
+            x: innerWidth / 2,
+            y: innerHeight / 2,
+        }
+        let colors = [
+            "#9BF6FF", // Electric Blue
+            "#CAFFBF", // Tea Green
+            "#FDFFB6", // Cream
+            "#FFD6A5", // Sunset
+            "#FFADAD", // Melon
+            "#E57373", // Coral
+            "#BA68C8", // Lavender
+            "#90CAF9", // Baby Blue
+            "#4DB6AC", // Mint
+            "#DCE775", // Pale Yellow
+        ]
+        let lines
+        function initialise() {
+            canvas.height = window.innerHeight
+            canvas.width = window.innerWidth
+            lines = []
+            for (let x = 0; x < 60; x++) {
+                let line = new Line(
+                    mouse.x, mouse.y,
+                    Line.random(3, 3),
+                    colors[Line.random(0, 9)],
+                    Math.random() * Math.PI,
+                    Line.random(3, 30) / 100,
+                    Line.random(0, 120),
+                )
+                lines.push(line)
+            }
+            console.log(lines)
+        }
+        initialise()
+
+        function animate() {
+            c.fillStyle = 'rgba(1,1,1,0.1)'
+            c.fillRect(0, 0, innerWidth, innerHeight)
+            requestAnimationFrame(animate)
+            lines.forEach((line) => {
+                line.mx += (mouse.x - line.mx) * 0.05
+                line.my += (mouse.y - line.my) * 0.05
+                line.Pos(
+                    line.mx + (Math.cos(line.r) * line.d)
+                    , line.my + (Math.sin(line.r) * line.d)
+                )
+                line.r += line.v
+                line.draw()
+            })
+        }
+        animate()
+        window.onmousemove = (e) => {
+            // mouse.ox += (e.clientX - mouse.ox) * 0.05
+            // mouse.oy += (e.clientY - mouse.oy) * 0.05
+            mouse.x = e.clientX
+            mouse.y = e.clientY
+        }
+
+        window.onresize = initialise
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rectangles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas>
+
+    </canvas>
+    <script>
+        let canvas = document.querySelector('canvas')
+        let c = canvas.getContext('2d')
+        canvas.height = window.innerHeight
+        canvas.width = window.innerWidth
+        function random(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        let mouse = {
+            x: 10,
+            y: 10
+        }
+        class Box {
+            constructor(x, y, width, height, color) {
+                this.x = x
+                this.y = y
+                this.width = width
+                this.height = height
+                this.color = color
+            }
+            stroke() {
+                this.oc = c.strokeStyle
+                c.strokeStyle = color
+                c.strokeRect(this.x, this.y, this.width, this.height)
+                c.strokeStyle = this.oc
+            }
+            fill() {
+                this.oc = c.fillStyle
+                c.fillStyle = this.color
+                c.fillRect(this.x, this.y, this.width, this.height)
+                c.fillStyle = this.oc
+            }
+        }
+        let box1
+        let box2
+        function init() {
+            canvas.height = window.innerHeight
+            canvas.width = window.innerWidth
+
+            box1 = new Box(10, 10, 100, 200, 'aqua')
+            box2 = new Box(innerWidth / 2, innerHeight / 2, 300, 200, 'lime')
+        }
+        init()
+        let touching = (box1, box2) => {
+            let xt = (box1.x + box1.width >= box2.x) && (box2.x + box2.width > box1.x)
+            let yt = (box1.y + box1.height >= box2.y) && (box2.y + box2.height > box1.y)
+            return xt && yt
+        }
+        function animate() {
+            requestAnimationFrame(animate)
+            c.clearRect(0, 0, canvas.width, canvas.height)
+            box1.y = mouse.y - box2.height / 2
+            box1.x = mouse.x - box1.width / 2
+            if (touching(box1, box2)) {
+                box1.color = 'steelblue'
+                box2.color = 'steelblue'
+            }
+            else {
+                box1.color = 'aqua'
+                box2.color = 'lime'
+            }
+            box1.fill()
+            box2.fill()
+        }
+        animate()
+        window.onresize = init
+        // canvas.onmouseover = e => mouseOn = true
+        // canvas.onmouseout = e => mouseOn = false
+
+        canvas.onmousemove = (e) => {
+            mouse.x = e.clientX
+            mouse.y = e.clientY
+            // console.log(mouse)
+        }
+    </script>
+</body>
+
+</html>

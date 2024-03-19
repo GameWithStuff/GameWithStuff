@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas></canvas>
+    <script>
+        let score = 0
+        const canvas = document.querySelector('canvas')
+        const c = canvas.getContext('2d')
+        let playerRadius = 40
+
+        let init = () => {
+            canvas.width = window.innerWidth
+            canvas.height = window.innerHeight
+        }
+        function random(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        init()
+
+
+
+        let mouse = {
+            x: 0,
+            y: 0,
+            angleFromCenter: Math.atan2(0 - innerWidth / 2, 0 - innerHeight / 2)
+        }
+
+        let gun = {
+            len: 100,
+            // len: playerRadius * 2,
+        }
+
+        class Bullet {
+            constructor() {
+                this.x = innerWidth / 2
+                this.y = innerHeight / 2
+                this.angle = Math.atan2(mouse.y - this.y, mouse.x - this.x)
+                this.len = 3
+                this.mx = mouse.x
+                this.my = mouse.y
+                // this.mx = mouse.x - innerWidth / 2
+                // this.my = mouse.y - innerHeight / 2
+                this.i = bullets.length
+            }
+            draw() {
+                c.strokeStyle = '#fff'
+                c.lineWidth = 10
+                c.beginPath()
+
+                c.moveTo(this.x, this.y)
+                // const endX = hi;
+                // const endY = hi;
+                // if (this.mx > this.x) {
+                //     this.x += innerWidth / 100
+                // }
+                // else {
+                //     this.x -= innerWidth / 100
+                // }
+                // if (this.my > this.y) {
+                //     this.y += innerHeight / 100
+                // }
+                // else {
+                //     this.y -= innerHeight / 100
+                // }
+                this.x += Math.cos(this.angle) * (innerWidth / 20)
+                this.y += Math.sin(this.angle) * (innerHeight / 20)
+                if (
+                    this.x < 0
+                    ||
+                    this.x > innerWidth
+                    ||
+                    this.y < 0
+                    ||
+                    this.y > innerHeight
+                ) {
+                    bullets.splice(bullets.indexOf(this), 1)
+                    // console.log(bullets)
+                }
+
+                c.lineTo(
+                    this.x
+                    , this.y
+                )
+                c.stroke()
+            }
+        }
+
+        let bullets = []
+        let playing = true
+        class Enemy {
+            constructor() {
+                this.r = playerRadius / 4
+                if (Math.random() >= 0.5) {
+                    if (Math.random() >= 0.5) {
+                        this.y = -this.r - this.r
+                    }
+                    else {
+                        this.y = innerHeight + this.r + this.r
+                    }
+                    this.x = random(0, innerWidth)
+                }
+                else {
+                    if (Math.random() >= 0.5) {
+                        this.x = -this.r - this.r
+                    }
+                    else {
+                        this.x = innerWidth + this.r + this.r
+                    }
+                    this.y = random(0, innerHeight)
+                }
+                this.dx = innerWidth / 2 - this.x
+                this.dy = innerHeight / 2 - this.y
+            }
+
+
+            draw(ID) {
+                this.x += this.dx / 100
+                this.y += this.dy / 100
+                c.beginPath()
+                c.arc(
+                    this.x,
+                    this.y,
+                    playerRadius,
+                    0,
+                    2 * Math.PI
+                )
+                c.fillStyle = 'rgba(255,255,255,0.5)'
+                c.strokeStyle = '#fff'
+                c.lineWidth = 5
+                c.fill()
+                c.stroke()
+                if (touching(this, { x: innerWidth / 2, y: innerHeight / 2 })) {
+                    cancelAnimationFrame(ID)
+                    playing = false
+                }
+                bullets.forEach(bullet => {
+                    if (touching(this, bullet)) {
+                        bullets.splice(bullets.indexOf(bullet), 1)
+                        enemies.splice(enemies.indexOf(this), 1)
+                        score++
+                    }
+                });
+
+
+            }
+        }
+        let enemyStep = 5
+        let enemies = []
+
+        let touching = (enemy, box) => {
+            let dx = Math.abs(enemy.x - box.x);
+            let dy = Math.abs(enemy.y - box.y);
+            let distance = Math.sqrt(dx ** 2 + dy ** 2);
+            let d = distance <= playerRadius * 2;
+            //////
+            let xOverlap = (enemy.x + enemy.r >= box.x) && (enemy.x - playerRadius <= box.x + box.width);
+            let yOverlap = (enemy.y + enemy.r >= box.y) && (enemy.y - playerRadius <= box.y + box.height);
+            return (xOverlap && yOverlap) || d
+        }
+
+        let IID = setInterval(() => {
+            if (playing) {
+                enemies.push(new Enemy())
+            }
+        }, 1000)
+        function animate() {
+            let frameID = requestAnimationFrame(animate)
+            c.clearRect(0, 0, innerWidth, innerHeight)
+            c.beginPath()
+            c.arc(
+                innerWidth / 2,
+                innerHeight / 2,
+                playerRadius,
+                0,
+                2 * Math.PI
+            )
+            c.fillStyle = '#fff'
+            c.fill()
+
+            c.strokeStyle = 'rgba(255,255,255,0.5)'
+            c.lineWidth = 80
+            c.beginPath()
+            let x
+            let y
+            c.moveTo(innerWidth / 2, innerHeight / 2)
+            const endX = innerWidth / 2 + gun.len * Math.cos(Math.atan2(mouse.y - innerHeight / 2, mouse.x - innerWidth / 2));
+            const endY = innerHeight / 2 + gun.len * Math.sin(Math.atan2(mouse.y - innerHeight / 2, mouse.x - innerWidth / 2));
+            c.lineTo(endX, endY)
+            c.stroke()
+
+            bullets.forEach(bullet => {
+                bullet.draw()
+            })
+            enemies.forEach(enemy => {
+                enemy.draw(frameID)
+            })
+            c.lineWidth = 3
+            c.font = '30px Arial'
+            c.strokeStyle = 'rgb(127,127,127)'
+            c.strokeText(`Score: ${score}`, innerWidth / 2 - 80, 30)
+        }
+
+        animate()
+
+        window.onmousemove = (e) => {
+
+            mouse.x = e.clientX
+            mouse.y = e.clientY
+            angleFromCenter: Math.atan2(e.clientX - innerWidth / 2, e.clientY - innerHeight / 2)
+
+        }
+
+        window.onclick = () => {
+            if (playing) {
+
+                bullets.push(new Bullet())
+                c.strokeStyle = 'rgba(255,255,255,0.5)'
+                c.lineWidth = 80
+                c.beginPath()
+                let x
+                let y
+                c.moveTo(innerWidth / 2, innerHeight / 2)
+                const endX = innerWidth / 2 + gun.len * Math.cos(Math.atan2(mouse.y - innerHeight / 2, mouse.x - innerWidth / 2));
+                const endY = innerHeight / 2 + gun.len * Math.sin(Math.atan2(mouse.y - innerHeight / 2, mouse.x - innerWidth / 2));
+                c.lineTo(endX, endY)
+                c.stroke()
+            }
+        }
+
+        window.onresize = init
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            box-sizing: border-box;
+            display: grid;
+            place-items: center;
+        }
+
+        .btn-outline-info:hover {
+            color: white !important;
+        }
+
+        .btn,
+        .result-container {
+            margin: 4vh 10vw;
+            width: 80vw;
+            height: 10vh;
+            display: grid;
+            place-content: center;
+        }
+    </style>
+</head>
+
+
+<body>
+    <button type="button" class="weak btn btn-outline-primary">Generate Weak Password
+    </button>
+    <button type="button" class="btn btn-outline-success strong">Generate Strong Password</button>
+    <button type="button" class="btn btn-outline-danger superStrong">Generate Super Strong Password</button>
+    <button type="button" class="btn btn-outline-info funny">Generate Funny Password</button>
+    <div class="result-container">Generated Password: <span class="fw-semibold result">Please Generate
+            Password</span>
+</body>
+</div>
+
+<script>
+
+    console.log('error')
+
+    document.body.onload = () => {
+
+        class passwordGenerator {
+
+            get password() {
+                return this._password
+            }
+
+            set password(pw) {
+                this._password = pw
+            }
+
+            setPassword(password) {
+                document.querySelector('.result').innerHTML = password
+            }
+
+            weakPassword() {
+                this.password = ''
+                for (let i = 0; i <= 8; i++) {
+                    this.password += [`a`, `b`, `c`, `d`, `e`, `f`, `g`, `h`, `i`, `j`, `k`, `l`, `m`, `n`, `o`, `p`, `q`, `r`, `s`, `t`, `u`, `v`, `w`, `x`, `y`, `z`][
+                        Math.floor(Math.random() * 26)
+                    ]
+                }
+                return (this.password)
+
+            }
+            strongPassword() {
+                this.password = ''
+                for (let i = 0; i <= 12; i++) {
+                    this.password += [`a`, `b`, `c`, `d`, `e`, `f`, `g`, `h`, `i`, `j`, `k`, `l`, `m`, `n`, `o`, `p`, `q`, `r`, `s`, `t`, `u`, `v`, `w`, `x`, `y`, `z`,
+                        `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L`, `M`, `N`, `O`, `P`, `Q`, `R`, `S`, `T`, `U`, `V`, `W`, `X`, `Y`, `Z`,
+                        `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`][
+                        Math.floor(Math.random() * 62)
+                    ]
+                }
+                return (this.password)
+
+            }
+            superStrongPassword() {
+                this.password = ''
+                for (let i = 0; i <= 15; i++) {
+                    this.password += [`a`, `b`, `c`, `d`, `e`, `f`, `g`, `h`, `i`, `j`, `k`, `l`, `m`, `n`, `o`, `p`, `q`, `r`, `s`, `t`, `u`, `v`, `w`, `x`, `y`, `z`,
+                        `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L`, `M`, `N`, `O`, `P`, `Q`, `R`, `S`, `T`, `U`, `V`, `W`, `X`, `Y`, `Z`,
+                        `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `~`, `!`, `@`, `#`, `$`, `%`, `^`, `&`, `*`, `(`, `)`, `-`, `_`, `=`, `+`, `[`, `{`, `}`, `]`, `|`, `<`, `,`, `>`, `/`, `?`][
+                        Math.floor(Math.random() * 87)
+                    ]
+                }
+                return (this.password)
+            }
+            funnyPassword() {
+                this.password = [
+                    `iForgotMyPassword`,
+                    `passwordIsPassword`,
+                    `letMeInPlease`,
+                    `trustNoOne`,
+                    `correctHorseBatteryStaple`,
+                    `qwertyuiop`,
+                    `iloveyou3000`,
+                    `thisIsASecurePassword`,
+                    `admin1234`,
+                    `passwordGenerator`,
+                    `letMeIn`,
+                    `incorrect`,
+                    `uAintCominIn`,
+                    `noSoupForYou`,
+                    `openSesame`,
+                    `hakunaMatata`,
+                    `superSecretPassword`,
+                    `guest1234`,
+                    `password1234`,
+                    `helloWorld`
+                ][
+                    Math.floor(Math.random() * 20)
+                ]
+                return (this.password)
+            }
+        }
+
+
+        let pwg = new passwordGenerator()
+
+        document.querySelector('.weak').onclick = () => {
+            document.querySelector('.result').innerHTML = pwg.weakPassword()
+        }
+        document.querySelector('.strong').onclick = () => {
+            document.querySelector('.result').innerHTML = pwg.strongPassword()
+        }
+        document.querySelector('.superStrong').onclick = () => {
+            document.querySelector('.result').innerHTML = pwg.superStrongPassword()
+        }
+        document.querySelector('.funny').onclick = () => {
+            document.querySelector('.result').innerHTML = pwg.funnyPassword()
+        }
+
+    }
+
+
+</script>
+
+</html>
