@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tell Me A Joke</title>
+    <style>
+        body,
+        html {
+            background-color: black;
+            height: 100%;
+            width: 100%;
+            display: grid;
+            place-items: center;
+        }
+
+        .display {
+            background: black;
+            display: grid;
+            place-content: center;
+            height: 100%;
+            width: 100%;
+            color: aqua;
+            font-size: 10vh;
+            text-shadow: 0px 0px 10vw rgb(0, 255, 255);
+            /* border: 1vh solid rgb(143, 255, 255); */
+            border-radius: 4vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="display">
+    </div>
+    <script>
+        const display = document.querySelector('.display')
+        const jokes = {
+            "Why did the tomato turn red?": "Because it saw the salad dressing!",
+            "Why did the scarecrow win an award?": "Because he was outstanding in his field",
+            "Why do birds fly south for the winter?": "It's too far to walk",
+            "Why don't scientists trust atoms?": "Because they make up everything",
+            "What kind of tree fits into your hand?": "A palm tree!",
+            "Why did the cookie go to the doctor?": "Because it was feeling crummy",
+            "How does a penguin build its house?": "Igloos it together",
+            "Why did the bicycle fall over?": "Because it was two-tired",
+            "What do you call cheese that is not yours?": "Nacho cheese",
+            "Why was the math book sad?": "Because it had too many problems",
+            "How does a squid go into battle?": "Well armed",
+            "Why are fish so smart?": "Because they're always in schools",
+            "What falls in winter but never gets hurt?": "Snow",
+            "Why can't a nose be 12 inches long?": "Because then it would be a foot",
+            "What do you call a fake noodle?": "An impasta",
+            "Why did the banana go to the doctor?": "Because it wasn't peeling well",
+            "Why are ghosts bad liars?": "Because they are easy to see through",
+            "Which building in New York has the most stories?": "The public library",
+            "Why did the frog call his insurance company?": "He had a jump in his car",
+            "What do elves learn in school?": "The elf-abet",
+            "How do you throw a space party?": "You planet",
+            "What do you get when you cross a snowman and a shark?": "Frostbite",
+            "Why do programmers prefer dark mode?": "Because light attracts bugs",
+            "How do you organize a space party?": "You planet",
+            "What do you give a sick bird?": "Tweetment",
+            "What did the grape say when it got stepped on all day?": "Nothing, it just let out a little wine",
+            "What is the biggest ant in the world?": "An elephant!",
+            "What's the difference between a poorly dressed man on a trampoline and a well-dressed man on a trampoline?": "Attire",
+            "What never goes to school but always gets good grades?": "A thermometer",
+            "Why is it so hard for a leopard to hide?": "Because he's always spotted",
+            "Which animal has more lives than a cat?": "A frog - it croaks every night",
+            "What do you call a sleeping bull?": "A bulldozer",
+            "Why did the music teacher need a ladder?": "To reach the high notes",
+            "What do you call a snowman with a six-pack?": "An abdominal snowman",
+            "How does a rabbi make coffee?": "Hebrews it",
+            "What do you call a bear with no teeth?": "A gummy bear",
+            "Why don’t seagulls fly by the bay?": "Because then they would be bagels",
+            "What do you call a snake that works for the government?": "A civil serpent",
+            "Why does it take longer to get from first to second base than it does from second to third base?": "Because there's a shortstop in between",
+            "Why do hummingbirds hum?": "Because they don't know the words",
+            "What is a tornado's favorite game to play?": "Twister",
+            "What kind of music do planets sing?": "Nep-tunes",
+            "What do you call a pile of cats?": "A meowtain",
+            "Why couldn’t the bicycle stand up by itself?": "Because it was two tired",
+            "What did the janitor say when he jumped out of the closet?": "Supplies!",
+            "Why did the kid cross the playground?": "To get to the other slide",
+            "What do you get when you cross a snowman and a vampire?": "Frostbite",
+            "What do you call a boomerang that doesn’t work?": "A stick",
+            "Why can't Chinese people play Baseball?": "Because They ate the bat"
+        }
+        let joke = Object.keys(jokes)[Math.floor(Math.random() * Object.keys(jokes).length)]
+        display.innerHTML = joke + '<br>' + jokes[joke]
+
+
+
+
+
+    </script>
+</body>
+
+</html>

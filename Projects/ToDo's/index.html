@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Belanosima&display=swap" rel="stylesheet">
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background: #fff;
+        }
+
+        * {
+            font-family: 'Belanosima', sans-serif;
+            font-variant: small-caps;
+        }
+
+        .Title {
+            color: #000;
+            display: grid;
+            place-content: center;
+            font-weight: bolder;
+        }
+
+        .ToDoName {
+            display: grid;
+            place-content: center;
+            box-sizing: border-box;
+
+            background-color: gold;
+            padding: 1vh 2vw 1vh 2vw;
+            /* position: relative;
+            bottom: 2.7vh;
+            left: 1.5vw; */
+
+            /* margin: 0; */
+        }
+
+        .AddToDo>* {
+            border-radius: 5px;
+            border: none;
+            margin: 0.5vw;
+        }
+
+        .AddToDo {
+            margin: 5vh 5vw;
+            height: 20vh;
+            padding: 0;
+
+            display: grid;
+            grid-template-columns: 1fr 3fr 1fr;
+
+        }
+
+        .AddInput {
+            display: inline-block;
+            /* height: 100%; */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        span {
+            display: inline-block;
+        }
+
+
+
+        button {
+            background-color: #f00;
+            color: #fff
+        }
+
+        button:hover {
+            color: #f00;
+            border: 2px solid red;
+            background-color: #fff
+        }
+
+        /* ul{
+        } */
+
+
+
+
+        @media only screen and ((orientation: landscape)) {
+            * {
+                font-size: 2.5vw;
+            }
+
+            .ToDoName {
+
+                font-size: 2.5vw;
+                border-top-left-radius: 1vw;
+                border-bottom-left-radius: 1vw;
+                grid-template-columns: 3fr 1fr;
+            }
+        }
+
+        li {
+            display: grid;
+            list-style: none;
+            width: 90vw;
+            margin: 5vh 5vw;
+            height: 20vh;
+            grid-template-columns: 3fr 1fr;
+
+        }
+
+        li,
+        .AddToDo {
+            border: 2px solid rgb(0, 0, 0);
+            border-radius: 5px;
+        }
+
+        li>* {
+            border-radius: 5px;
+            border: none;
+            margin: 0.5vw;
+        }
+
+
+        @media only screen and ((orientation: portrait) or (aspect-ratio:1/1)) {
+            * {
+                font-size: 2.5vh;
+            }
+
+            .ToDoName {
+                font-size: 2.5vh;
+                border-top-left-radius: 1vh;
+                border-bottom-left-radius: 1vh;
+
+            }
+
+        }
+
+        textarea {
+            background-color: #aaa;
+            padding: 2vh 2vw;
+            resize: none;
+        }
+
+        .Create {
+            padding: 0;
+            display: grid;
+            place-content: center;
+        }
+
+
+
+        /* * {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            background-color: rgba(0, 0, 0, 0.2) !important;
+        }*/
+    </style>
+</head>
+
+<body>
+    <div class="Title">
+        My ToDo
+    </div>
+    <div class="AddToDo">
+        <span class="ToDoName">
+            Create Todo
+        </span>
+        <textarea type="text" spellcheck="false" class="AddInput"></textarea>
+        <button class="Create">Create</button>
+    </div>
+    <div class="ToDos">
+        <ul>
+
+        </ul>
+    </div>
+
+    <script>
+        const baseTodo = document.createElement('li')
+        baseTodo.innerHTML = `
+            <textarea type="text" class="text" spellcheck="false"></textarea>
+            <button class="delete">
+                Delete
+            </button>
+        `
+        let getBaseTodo = () => {
+            return baseTodo.cloneNode(true)
+        }
+
+        let getTasksArray = () => {
+            if (localStorage.getItem('tasks') === null) {
+                localStorage.setItem('tasks', JSON.stringify([]))
+                return []
+            }
+            else {
+                return JSON.parse(localStorage.getItem('tasks'))
+            }
+        }
+
+        function setTasksArray(tasksArray) {
+            localStorage.setItem('tasks', JSON.stringify(tasksArray))
+        }
+
+        function refreshTasks() {
+            let Tasks = Array.from(document.querySelector('ul').children)
+            let newTasksArray = Tasks.map((task) => task.querySelector('.text').value)
+            setTasksArray(newTasksArray)
+        }
+
+        function deleteTask(event) {
+            event.target.parentElement.remove()
+            refreshTasks()
+        }
+
+        function loadNewTask(taskStr) {
+            let baseTodo = getBaseTodo()
+            baseTodo.querySelector('.text').value = taskStr
+            let newTasksArray = getTasksArray()
+            newTasksArray.push(taskStr)
+            setTasksArray(newTasksArray)
+            baseTodo.querySelector('.delete').onclick = deleteTask
+            baseTodo.querySelector('.text').oninput = refreshTasks
+            document.querySelector('ul').appendChild(baseTodo)
+        }
+
+
+        document.body.onload = () => {
+            let tasksArray = getTasksArray()
+            tasksArray.forEach((taskStr) => {
+                let baseTodo = getBaseTodo()
+                baseTodo.querySelector('.text').value = taskStr
+                baseTodo.querySelector('.delete').onclick = deleteTask
+                document.querySelector('ul').appendChild(baseTodo)
+                baseTodo.querySelector('.text').oninput = refreshTasks
+
+            })
+        }
+
+        document.querySelector('.Create').onclick = (event) => {
+            let taskStr = event.target.previousElementSibling.value
+            event.target.previousElementSibling.value = ''
+            loadNewTask(taskStr)
+        }
+
+
+    </script>
+
+</body>
+
+</html>

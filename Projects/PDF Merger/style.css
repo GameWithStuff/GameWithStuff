@@ -1,0 +1,41 @@
+:root {
+    --blue: rgb(0, 183, 234);
+    --darkBlue: rgb(0, 208, 255);
+    --white: rgb(234, 234, 234);
+}
+
+body,
+html {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    background-color: var(--blue) !important;
+
+}
+
+
+.files {
+    border-radius: 10px !important;
+    border: 2px solid black !important;
+    outline: none !important;
+    width: 90vw;
+    background-color: var(--darkBlue) !important;
+    color: var(--white);
+    /* height: 50vh; */
+    /* width: 50vw; */
+}
+
+.merge {
+    background-color: var(--darkBlue) !important;
+    border-radius: 10px !important;
+    height: 20vh;
+    width: 90vw;
+    color: var(--white);
+
+}
+
+.heading {
+    font-size: x-large;
+}

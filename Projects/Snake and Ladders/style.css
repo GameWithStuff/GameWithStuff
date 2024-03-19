@@ -1,0 +1,36 @@
+.snakesAndLadders {
+    background-image: url(https://media.istockphoto.com/id/577332576/vector/colorfull-snake-and-ladder-game.jpg?s=612x612&w=0&k=20&c=7rRqG1dZOfeEbHEiTrFn1hVnFS0IMphGMi0SuapuYEA=);
+    display: grid;
+    height: 100vh;
+    width: 100vh;
+    background-size: 100% 100%;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+}
+
+body {
+    display: grid;
+    place-items: center;
+    margin: 0;
+}
+
+.Player-1 {
+    height: 4vh;
+    width: 4vh;
+    border-radius: 4vh;
+    background: blue;
+    margin: 0.5vh;
+}
+
+.Player-2 {
+    margin: 0.5vh;
+    margin-left: 5vh;
+    background-color: lime;
+    border-radius: 4vh;
+    height: 4vh;
+    width: 4vh;
+}
+
+Tile {
+    display: grid;
+}
