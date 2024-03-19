@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Try Windows 11</title>
+    <style>
+        video {
+            height: 100vh;
+            width: 100vw;
+            /* background-size: cover; */
+            background-image: linear-gradient(#85aeca, #b7cbdd);
+            position: absolute;
+            z-index: -1;
+        }
+
+        body {
+            display: grid;
+            grid-template-rows: 1fr;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .taskbar {
+            align-self: end;
+            background-image: url('TaskBar.png');
+            height: 50px;
+            background-repeat: no-repeat;
+            /* align-self: flex-end; */
+            background-position: center;
+            background-color: #d9d9d9;
+            position: absolute;
+            background-size: contain;
+            top: calc(100vh - 50px);
+            width: 100vw;
+            display: grid;
+            grid-template-columns: 1fr repeat(6, 47px) 1fr;
+        }
+
+        .taskbar button {
+            /* visibility: hidden; */
+            opacity: 0;
+            /* border: none; */
+        }
+
+        .taskbar button:hover {
+            opacity: 0.5;
+
+        }
+
+        .window {
+            background-image: url('Window.png');
+            border: 1px solid gray;
+            position: absolute;
+            /* margin: auto; */
+            top: 100vh;
+            height: 80vh;
+            width: 38.5vw;
+            left: 31.25vw;
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: comeDown 0.5s linear 0s 1 alternate;
+            /* visibility: hidden; */
+        }
+        .search {
+            background-image: url('Search.png');
+            border: 1px solid gray;
+            position: absolute;
+            /* margin: auto; */
+            top: 100vh;
+            height: 80vh;
+            width: 47vw;
+            left: 26.5vw;
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: comeDown 0.5s linear 0s 1 alternate;
+            /* visibility: hidden; */
+        }
+
+        .up {
+            animation: comeUp 0.5s linear 0s 1 alternate;
+            top: 10vh;
+        }
+
+        @keyframes comeUp {
+            0% {
+                /* visibility: visible; */
+                top: 100vh;
+            }
+
+            100% {
+                top: 10vh;
+            }
+        }
+        @keyframes comeDown {
+            100% {
+                top: 100vh;
+            }
+
+            0% {
+                top: 10vh;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <video src="BG.mp4" autoplay muted></video>
+    <div class="taskbar">
+        <div></div>
+        <button class="b1"></button>
+        <button class="b2"></button>
+        <button class="b3"></button>
+        <button class="b4"></button>
+        <button class="b5"></button>
+        <button class="b6"></button>
+    </div>
+    <div class="window up">
+    </div>
+    <div class="search">
+    </div>
+    <script>
+        document.querySelector('.b1').onclick = () => {
+            document.querySelector('.window').classList.toggle('up')
+        }
+        document.querySelector('.b2').onclick = () => {
+            document.querySelector('.search').classList.toggle('up')
+        }
+    </script>
+</body>
+
+</html>
