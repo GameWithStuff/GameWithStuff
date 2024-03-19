@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+
+        }
+
+        body {
+            display: grid;
+            place-items: center;
+            place-content: center;
+            background-color: #45d791;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        canvas {
+            background-image: url('https://img.freepik.com/premium-vector/green-black-seamless-check-pattern_713536-219.jpg?w=360');
+            background-size: cover;
+        }
+        div,span{
+            font-size: xx-large;
+        }
+
+        @media (orientation: portrait) {
+            body {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 10fr !important;
+            }   
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        Score: <span class="score">0</span>
+    </div>
+    <canvas></canvas>
+    <script>
+        let score = 0
+        let lastKey = 'd'
+        let canvas = document.querySelector('canvas')
+        let c = canvas.getContext('2d')
+        let oldHead = '00'
+        let head = '00'
+        let random = (min, max) => Math.floor(Math.random() * max) + min
+        let food
+        let bodyParts = []
+        let setFood = () => {
+            food = String(random(0, 9)) + random(0, 9)
+            if (food == head) {
+                setFood()
+            }
+            if (bodyParts.filter(body => body === food).length > 0) {
+                setFood()
+            }
+        }
+        setFood()
+        function getCoordinateX(seed) {
+            return Number(seed[0]) * (wid)
+        }
+        function getCoordinateY(seed) {
+            return Number(seed[1]) * (wid)
+        }
+        let wid
+        function create(seed, color) {
+            let x = getCoordinateX(seed)
+            let y = getCoordinateY(seed)
+            c.fillStyle = color
+            c.fillRect(x, y, wid, wid)
+        }
+
+        function init() {
+            canvas.height = Math.min(window.innerHeight, window.innerWidth)
+            canvas.width = Math.min(window.innerHeight, window.innerWidth)
+            wid = canvas.height / 10
+
+            // create('90')
+
+        }
+        init()
+        let move = e => {
+            oldHead = head
+            if (e.key.toLowerCase() == 's' || e.keyCode == 40) {
+                // Number(head[1]) - 1
+                bodyParts[0] = head
+                bodyParts.splice(0, 1)
+                bodyParts.push(head)
+                head = head[0] + (Number(head[1]) + 1)
+                lastKey = 's'
+            }
+            if (e.key.toLowerCase() == 'w' || e.keyCode == 38) {
+                bodyParts[0] = head
+                bodyParts.splice(0, 1)
+                bodyParts.push(head)
+                head = head[0] + (Number(head[1]) - 1)
+                lastKey = 'w'
+            }
+            if (e.key.toLowerCase() == 'a' || e.keyCode == 37) {
+                bodyParts[0] = head
+                bodyParts.splice(0, 1)
+                bodyParts.push(head)
+                head = (Number(head[0]) - 1) + head[1]
+                lastKey = 'a'
+            }
+            if (e.key.toLowerCase() == 'd' || e.keyCode == 39) {
+                bodyParts[0] = head
+                bodyParts.splice(0, 1)
+                bodyParts.push(head)
+                head = (Number(head[0]) + 1) + head[1]
+                lastKey = 'd'
+            }
+            if (head.length > 2) {
+                window.onkeypress = () => { }
+                head = oldHead
+                document.body.style.gridTemplateColumns = '1fr'
+                document.body.style.gridTemplateRows = '1fr'
+                canvas.remove()
+            }
+            if (food === head) {
+                bodyParts.push(oldHead)
+                setFood()
+                document.querySelector('.score').innerHTML = ++score
+            }
+            bodyParts.forEach(body => {
+                if (head === body) {
+                    window.onkeypress = () => { }
+                    head = oldHead
+                    canvas.remove()
+                    document.body.style.gridTemplateColumns = '1fr'
+                    document.body.style.gridTemplateRows = '1fr'
+                }
+            })
+        }
+
+        window.onkeypress = move
+        window.onkeydown = move
+        let ID = setInterval(() => {
+            move({ key: lastKey })
+        }, 1000)
+
+        window.onresize = init
+
+
+
+        function animate() {
+            requestAnimationFrame(animate)
+            c.clearRect(0, 0, innerHeight, innerWidth)
+            create(food, 'lime')
+            create(head, 'red')
+            bodyParts.forEach(body => create(body, 'steelBlue'))
+
+        }
+        animate()
+    </script>
+</body>
+
+</html>
